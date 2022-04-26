@@ -92,10 +92,7 @@ export default defineComponent({
     // お絵かき開始
     const dragStart = (e: MouseEvent): void => {
       if (context.value && canvasRect.value) {
-        drawStart(
-          e.clientX - canvasRect.value.x,
-          e.clientY - canvasRect.value.y
-        );
+        drawStart(e.clientX - canvasRect.value.x, e.clientY - canvasRect.value.y);
       }
     };
     const touchStart = (e: TouchEvent): void => {
