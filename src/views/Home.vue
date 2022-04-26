@@ -2,13 +2,20 @@
   <div class="home">
     <register-name @registerName="registerName" />
     <drawing-canvas
+      v-show="isDrawer && isNameRegistered"
       name="aaa"
       @draw="sendDraw"
       @draw-start="sendStartDraw"
       @draw-end="sendEndDraw"
       @delete-all="sendDeleteAll"
     />
-    <drawing-canvas name="displayCanvas" ref="displayCanvas" :drawable="false" class="mt-4" />
+    <drawing-canvas
+      v-show="!isDrawer && isNameRegistered"
+      name="displayCanvas"
+      ref="displayCanvas"
+      :drawable="false"
+      class="mt-4"
+    />
   </div>
 </template>
 
@@ -52,8 +59,17 @@ export default defineComponent({
       displayCanvas.value.deleteAll();
     });
 
+    const isDrawer = ref(false);
+    socket.on("drawer changed", (drawer: string) => {
+      console.log(socket.id, drawer);
+      isDrawer.value = socket.id === drawer;
+      console.log(isDrawer.value);
+    });
+
+    const isNameRegistered = ref(false);
     const registerName = (name: string) => {
       socket.emit("register name", name);
+      isNameRegistered.value = true;
     };
 
     const sendDraw = (payload: { x: number; y: number }): void => {
@@ -76,7 +92,8 @@ export default defineComponent({
       socket.emit("delete all");
     };
     return {
-      name,
+      isDrawer,
+      isNameRegistered,
       displayCanvas,
       registerName,
       sendDraw,
