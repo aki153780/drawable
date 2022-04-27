@@ -36,7 +36,6 @@ type Position = {
 };
 
 export default defineComponent({
-  name: "Canvas",
   props: {
     drawable: {
       type: Boolean,
@@ -48,7 +47,6 @@ export default defineComponent({
     },
   },
   setup(props, { emit }: SetupContext) {
-    const { name } = toRefs(props);
     const pointX = ref<number>(0);
     const canvasRect = ref<DOMRect | null>(null);
     const prevPosition = ref<Position>({ x: 0, y: 0 });

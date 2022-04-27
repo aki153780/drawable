@@ -2,7 +2,7 @@
   <div class="home">
     <register-name @registerName="registerName" />
     <drawing-canvas
-      v-show="isDrawer && isNameRegistered"
+      v-if="isDrawer && isNameRegistered"
       name="aaa"
       @draw="sendDraw"
       @draw-start="sendStartDraw"
@@ -39,15 +39,17 @@ export default defineComponent({
       console.log(socket.id);
     });
     socket.on("draw line", (payload) => {
-      console.log(payload);
+      console.log("受信：", payload, displayCanvas.value);
       const { x, y } = payload;
       if (!displayCanvas.value) return;
+      console.log("draw line");
       displayCanvas.value.draw(x, y);
     });
     socket.on("start draw", (payload) => {
       console.log(payload);
       const { x, y } = payload;
       if (!displayCanvas.value) return;
+      console.log("start draw");
       displayCanvas.value.drawStart(x, y);
     });
     socket.on("end draw", () => {
@@ -59,7 +61,7 @@ export default defineComponent({
       displayCanvas.value.deleteAll();
     });
 
-    const isDrawer = ref(false);
+    const isDrawer = ref(true);
     socket.on("drawer changed", (drawer: string) => {
       console.log(socket.id, drawer);
       isDrawer.value = socket.id === drawer;
