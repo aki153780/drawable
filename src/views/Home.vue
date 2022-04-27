@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, SetupContext, ref } from "vue";
+import { defineComponent, SetupContext, ref, onBeforeUnmount } from "vue";
 import DrawingCanvas from "@/components/drawing-canvas.vue";
 import RegisterName from "@/components/register-name.vue";
 import { io } from "socket.io-client";
@@ -38,6 +38,10 @@ export default defineComponent({
     socket.on("connect", () => {
       console.log(socket.id);
     });
+    onBeforeUnmount(() => {
+      socket.emit("disconnect", socket.id);
+    });
+
     socket.on("draw line", (payload) => {
       console.log("受信：", payload, displayCanvas.value);
       const { x, y } = payload;
