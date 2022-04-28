@@ -38,9 +38,6 @@ export default defineComponent({
     socket.on("connect", () => {
       console.log(socket.id);
     });
-    onBeforeUnmount(() => {
-      socket.emit("disconnect", socket.id);
-    });
 
     socket.on("draw line", (payload) => {
       console.log("受信：", payload, displayCanvas.value);
