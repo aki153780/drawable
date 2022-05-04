@@ -4,20 +4,20 @@
     <template v-if="isDrawer && isNameRegistered">
       <div class="m-4">
         <button
-          v-show="drawable"
+          v-show="!isAnswering"
           class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mr-2 rounded disabled:opacity-25"
           @click="sendDeleteAll"
         >
           すべて削除
         </button>
-        <span v-show="!drawable">回答中です。しばらくお待ちください。</span>
+        <span v-show="isAnswering">回答中です。しばらくお待ちください。</span>
       </div>
       <div class="w-full flex justify-center">
         <drawing-canvas
           ref="drawingCanvas"
           :width="width"
           :height="height"
-          :drawable="drawable"
+          :drawable="!isAnswering"
           class="drawable-canvas"
           @draw="sendDraw"
           @draw-start="sendStartDraw"
@@ -65,7 +65,7 @@ export default defineComponent({
     const drawingCanvas = ref();
     const width = 600;
     const height = 400;
-    const drawable = ref(true);
+    const isAnswering = ref(false);
 
     const socket = io("http://localhost:3000");
     socket.on("connect", () => {
@@ -96,10 +96,10 @@ export default defineComponent({
     });
     socket.on("stop drawing", () => {
       console.log("stop drawing");
-      if (drawingCanvas.value) drawable.value = false;
+      if (drawingCanvas.value) isAnswering.value = true;
     });
     socket.on("failed answering", () => {
-      if (drawingCanvas.value) drawable.value = true;
+      if (drawingCanvas.value) isAnswering.value = false;
     });
 
     const isDrawer = ref(true);
@@ -140,7 +140,7 @@ export default defineComponent({
     return {
       width,
       height,
-      drawable,
+      isAnswering,
       isDrawer,
       isNameRegistered,
       displayCanvas,
