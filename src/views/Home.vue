@@ -10,24 +10,28 @@
           すべて削除
         </button>
       </div>
+      <div class="w-full flex justify-center">
+        <drawing-canvas
+          ref="drawingCanvas"
+          :width="width"
+          :height="height"
+          @draw="sendDraw"
+          @draw-start="sendStartDraw"
+          @draw-end="sendEndDraw"
+        />
+      </div>
+    </template>
+    <div class="w-full flex justify-center">
       <drawing-canvas
-        ref="drawingCanvas"
+        v-show="!isDrawer && isNameRegistered"
+        name="displayCanvas"
         :width="width"
         :height="height"
-        @draw="sendDraw"
-        @draw-start="sendStartDraw"
-        @draw-end="sendEndDraw"
+        ref="displayCanvas"
+        :drawable="false"
+        class="mt-4"
       />
-    </template>
-    <drawing-canvas
-      v-show="!isDrawer && isNameRegistered"
-      name="displayCanvas"
-      :width="width"
-      :height="height"
-      ref="displayCanvas"
-      :drawable="false"
-      class="mt-4"
-    />
+    </div>
   </div>
 </template>
 

@@ -1,22 +1,18 @@
 <template>
-  <div class="w-full">
-    <div class="flex justify-center">
-      <canvas
-        class="drawable-canvas"
-        ref="canvas"
-        :width="canvasWidth"
-        :height="canvasHeight"
-        @mousedown="dragStart"
-        @touchstart="touchStart"
-        @mouseup="dragEnd"
-        @touchend="touchEnd"
-        @mouseout="dragEnd"
-        @touchcancel="touchEnd"
-        @mousemove="mouseDraw"
-        @touchmove="touchDraw"
-      ></canvas>
-    </div>
-  </div>
+  <canvas
+    class="drawable-canvas"
+    ref="canvas"
+    :width="canvasWidth"
+    :height="canvasHeight"
+    @mousedown="dragStart"
+    @touchstart="touchStart"
+    @mouseup="dragEnd"
+    @touchend="touchEnd"
+    @mouseout="dragEnd"
+    @touchcancel="touchEnd"
+    @mousemove="mouseDraw"
+    @touchmove="touchDraw"
+  ></canvas>
 </template>
 
 <script lang="ts">
