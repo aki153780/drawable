@@ -4,12 +4,13 @@
     <template v-if="isDrawer && isNameRegistered">
       <div class="m-4">
         <button
+          v-show="drawable"
           class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mr-2 rounded disabled:opacity-25"
           @click="sendDeleteAll"
-          :disabled="drawable"
         >
           すべて削除
         </button>
+        <span v-show="!drawable">回答中です。しばらくお待ちください。</span>
       </div>
       <div class="w-full flex justify-center">
         <drawing-canvas
