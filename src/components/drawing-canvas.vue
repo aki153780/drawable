@@ -1,6 +1,5 @@
 <template>
   <canvas
-    class="drawable-canvas"
     ref="canvas"
     :width="canvasWidth"
     :height="canvasHeight"
@@ -16,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, SetupContext, toRefs } from "vue";
+import { defineComponent, ref, onMounted, SetupContext } from "vue";
 
 type Position = {
   x: number;
@@ -46,7 +45,7 @@ export default defineComponent({
     const pointX = ref<number>(0);
     const canvasRect = ref<DOMRect | null>(null);
     const prevPosition = ref<Position>({ x: 0, y: 0 });
-    const canvas = ref<HTMLCanvasElement | null>(null);
+    const canvas = ref<HTMLCanvasElement | null>();
     const context = ref<CanvasRenderingContext2D | null>();
     const isDrag = ref(false);
     const canvasWidth = ref(props.width);
@@ -156,11 +155,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-.drawable-canvas {
-  border: 1px solid #aaa;
-  border-radius: 5px;
-}
-</style>

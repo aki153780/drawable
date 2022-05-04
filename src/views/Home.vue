@@ -15,6 +15,7 @@
           ref="drawingCanvas"
           :width="width"
           :height="height"
+          class="drawable-canvas"
           @draw="sendDraw"
           @draw-start="sendStartDraw"
           @draw-end="sendEndDraw"
@@ -29,7 +30,7 @@
         :height="height"
         ref="displayCanvas"
         :drawable="false"
-        class="mt-4"
+        class="mt-4 drawable-canvas"
       />
     </div>
   </div>
@@ -129,3 +130,9 @@ export default defineComponent({
   },
 });
 </script>
+<style>
+.drawable-canvas {
+  border: 1px solid #aaa;
+  border-radius: 5px;
+}
+</style>
