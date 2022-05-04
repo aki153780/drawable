@@ -45,6 +45,14 @@ export default defineComponent({
       type: String,
       default: "",
     },
+    width: {
+      type: Number,
+      required: true,
+    },
+    height: {
+      type: Number,
+      required: true,
+    },
   },
   setup(props, { emit }: SetupContext) {
     const pointX = ref<number>(0);
@@ -53,8 +61,8 @@ export default defineComponent({
     const canvas = ref<HTMLCanvasElement | null>(null);
     const context = ref<CanvasRenderingContext2D | null>();
     const isDrag = ref(false);
-    const canvasWidth = ref(600);
-    const canvasHeight = ref(400);
+    const canvasWidth = ref(props.width);
+    const canvasHeight = ref(props.height);
 
     // 線を描く
     const mouseDraw = (e: MouseEvent): void => {

@@ -3,7 +3,8 @@
     <register-name @registerName="registerName" />
     <drawing-canvas
       v-if="isDrawer && isNameRegistered"
-      name="aaa"
+      :width="width"
+      :height="height"
       @draw="sendDraw"
       @draw-start="sendStartDraw"
       @draw-end="sendEndDraw"
@@ -12,6 +13,8 @@
     <drawing-canvas
       v-show="!isDrawer && isNameRegistered"
       name="displayCanvas"
+      :width="width"
+      :height="height"
       ref="displayCanvas"
       :drawable="false"
       class="mt-4"
@@ -33,6 +36,8 @@ export default defineComponent({
   },
   setup() {
     const displayCanvas = ref();
+    const width = 600;
+    const height = 400;
 
     const socket = io("http://localhost:3000");
     socket.on("connect", () => {
@@ -95,6 +100,8 @@ export default defineComponent({
       socket.emit("delete all");
     };
     return {
+      width,
+      height,
       isDrawer,
       isNameRegistered,
       displayCanvas,
