@@ -1,15 +1,24 @@
 <template>
   <div class="home">
     <register-name @registerName="registerName" />
-    <drawing-canvas
-      v-if="isDrawer && isNameRegistered"
-      :width="width"
-      :height="height"
-      @draw="sendDraw"
-      @draw-start="sendStartDraw"
-      @draw-end="sendEndDraw"
-      @delete-all="sendDeleteAll"
-    />
+    <template v-if="isDrawer && isNameRegistered">
+      <div class="m-4">
+        <button
+          class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mr-2 rounded"
+          @click="sendDeleteAll"
+        >
+          すべて削除
+        </button>
+      </div>
+      <drawing-canvas
+        ref="drawingCanvas"
+        :width="width"
+        :height="height"
+        @draw="sendDraw"
+        @draw-start="sendStartDraw"
+        @draw-end="sendEndDraw"
+      />
+    </template>
     <drawing-canvas
       v-show="!isDrawer && isNameRegistered"
       name="displayCanvas"
@@ -36,6 +45,7 @@ export default defineComponent({
   },
   setup() {
     const displayCanvas = ref();
+    const drawingCanvas = ref();
     const width = 600;
     const height = 400;
 
@@ -95,8 +105,8 @@ export default defineComponent({
       socket.emit("end draw");
     };
     const sendDeleteAll = (): void => {
-      if (!displayCanvas.value) return;
-      displayCanvas.value.deleteAll();
+      if (displayCanvas.value) displayCanvas.value.deleteAll();
+      if (drawingCanvas.value) drawingCanvas.value.deleteAll();
       socket.emit("delete all");
     };
     return {
@@ -105,6 +115,7 @@ export default defineComponent({
       isDrawer,
       isNameRegistered,
       displayCanvas,
+      drawingCanvas,
       registerName,
       sendDraw,
       sendStartDraw,

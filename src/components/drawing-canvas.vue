@@ -1,13 +1,5 @@
 <template>
   <div class="w-full">
-    <div v-if="drawable" class="m-4">
-      <button
-        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mr-2 rounded"
-        @click="deleteAll"
-      >
-        すべて削除
-      </button>
-    </div>
     <div class="flex justify-center">
       <canvas
         class="drawable-canvas"
