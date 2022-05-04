@@ -4,8 +4,9 @@
     <template v-if="isDrawer && isNameRegistered">
       <div class="m-4">
         <button
-          class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mr-2 rounded"
+          class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mr-2 rounded disabled:opacity-25"
           @click="sendDeleteAll"
+          :disabled="drawable"
         >
           すべて削除
         </button>
@@ -15,6 +16,7 @@
           ref="drawingCanvas"
           :width="width"
           :height="height"
+          :drawable="drawable"
           class="drawable-canvas"
           @draw="sendDraw"
           @draw-start="sendStartDraw"
@@ -22,16 +24,25 @@
         />
       </div>
     </template>
-    <div class="w-full flex justify-center">
-      <drawing-canvas
-        v-show="!isDrawer && isNameRegistered"
-        name="displayCanvas"
-        :width="width"
-        :height="height"
-        ref="displayCanvas"
-        :drawable="false"
-        class="mt-4 drawable-canvas"
-      />
+    <div v-show="!isDrawer && isNameRegistered">
+      <div class="m-4">
+        <button
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 mr-2 rounded"
+          @click="proposeAnswer"
+        >
+          回答する
+        </button>
+      </div>
+      <div class="w-full flex justify-center">
+        <drawing-canvas
+          name="displayCanvas"
+          :width="width"
+          :height="height"
+          ref="displayCanvas"
+          :drawable="false"
+          class="mt-4 drawable-canvas"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -53,6 +64,7 @@ export default defineComponent({
     const drawingCanvas = ref();
     const width = 600;
     const height = 400;
+    const drawable = ref(true);
 
     const socket = io("http://localhost:3000");
     socket.on("connect", () => {
@@ -80,6 +92,13 @@ export default defineComponent({
     socket.on("delete all", () => {
       if (!displayCanvas.value) return;
       displayCanvas.value.deleteAll();
+    });
+    socket.on("stop drawing", () => {
+      console.log("stop drawing");
+      if (drawingCanvas.value) drawable.value = false;
+    });
+    socket.on("failed answering", () => {
+      if (drawingCanvas.value) drawable.value = true;
     });
 
     const isDrawer = ref(true);
@@ -114,9 +133,13 @@ export default defineComponent({
       if (drawingCanvas.value) drawingCanvas.value.deleteAll();
       socket.emit("delete all");
     };
+    const proposeAnswer = (): void => {
+      socket.emit("propose answer");
+    };
     return {
       width,
       height,
+      drawable,
       isDrawer,
       isNameRegistered,
       displayCanvas,
@@ -126,6 +149,7 @@ export default defineComponent({
       sendStartDraw,
       sendEndDraw,
       sendDeleteAll,
+      proposeAnswer,
     };
   },
 });

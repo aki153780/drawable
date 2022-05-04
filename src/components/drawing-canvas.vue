@@ -66,6 +66,10 @@ export default defineComponent({
       }
     };
     const draw = (posX: number, posY: number): void => {
+      if (!props.drawable) {
+        drawEnd();
+        return;
+      }
       if (!isDrag.value) {
         return;
       }
@@ -97,7 +101,7 @@ export default defineComponent({
       }
     };
     const drawStart = (x: number, y: number): void => {
-      if (!canvasRect.value) return;
+      if (!props.drawable && !canvasRect.value) return;
       isDrag.value = true;
       prevPosition.value = {
         x,
@@ -119,6 +123,7 @@ export default defineComponent({
     };
 
     const deleteAll = (): void => {
+      if (!props.drawable) return;
       context.value?.clearRect(0, 0, canvasWidth.value, canvasHeight.value);
       emit("delete-all");
     };
